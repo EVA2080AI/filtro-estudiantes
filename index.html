@@ -59,21 +59,9 @@
     }
 
     .nav-brand span {
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      background: linear-gradient(135deg, #ff4d4d, #8b5cf6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-    }
-
-    .status-tag {
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: rgba(59, 130, 246, 0.1);
-      color: var(--accent);
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     /* ── Container ── */
@@ -156,11 +144,9 @@
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+      box-shadow: 0 0 0 4px rgba(255, 77, 77, 0.15);
       background: #232733;
     }
-
-    select { cursor: pointer; }
 
     /* ── Custom Radio Buttons ── */
     .radio-group {
@@ -182,13 +168,11 @@
     }
 
     .radio-card input { display: none; }
-
     .radio-card .icon { font-size: 1.2rem; display: block; margin-bottom: 5px; }
     .radio-card .label { font-size: 0.8rem; font-weight: 600; display: block; }
     .radio-card .sub { font-size: 0.7rem; color: var(--text-secondary); display: block; }
 
     .radio-card:hover { border-color: rgba(255,255,255,0.2); background: #232733; }
-
     .radio-card.active[data-level="Muy limitado"] { border-color: var(--error); background: rgba(239, 68, 68, 0.1); }
     .radio-card.active[data-level="Acceso parcial"] { border-color: var(--warning); background: rgba(245, 158, 11, 0.1); }
     .radio-card.active[data-level="Acceso completo"] { border-color: var(--success); background: rgba(16, 185, 129, 0.1); }
@@ -210,32 +194,17 @@
     }
 
     .btn-submit:hover {
-      background: #2563eb;
+      background: #ff3333;
       transform: translateY(-2px);
       box-shadow: 0 8px 25px var(--accent-glow);
     }
 
-    .btn-submit:active { transform: translateY(0); }
-    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* ── Table Section ── */
+    /* ── Results Section ── */
     .results-card {
       margin-top: 3rem;
       display: none;
-    }
-
-    .filter-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .filter-row input, .filter-row select {
-      flex: 1;
-      min-width: 150px;
-      font-size: 0.85rem;
-      padding: 0.6rem 1rem;
     }
 
     .table-container {
@@ -254,17 +223,11 @@
       background: #1e212b;
       padding: 1rem;
       text-align: left;
-      font-weight: 600;
       color: var(--text-secondary);
       border-bottom: 1px solid var(--border);
     }
 
-    td {
-      padding: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    tr:last-child td { border-bottom: none; }
+    td { padding: 1rem; border-bottom: 1px solid var(--border); }
 
     .badge {
       padding: 4px 10px;
@@ -273,9 +236,8 @@
       font-weight: 600;
     }
 
-    .badge-blue { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
-    .badge-purple { background: rgba(139, 92, 246, 0.1); color: #a78bfa; }
     .badge-gray { background: rgba(148, 163, 184, 0.1); color: #cbd5e1; }
+    .badge-red { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; }
 
     /* ── Toast ── */
     #toast {
@@ -287,19 +249,17 @@
       background: var(--success);
       color: white;
       font-weight: 600;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       transform: translateY(100px);
-      transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transition: transform 0.3s;
       z-index: 1000;
+      display: none;
     }
 
-    #toast.show { transform: translateY(0); }
+    #toast.show { display: block; transform: translateY(0); }
     #toast.error { background: var(--error); }
 
-    /* ── Loader ── */
     .loader {
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       border: 2.5px solid rgba(255,255,255,0.3);
       border-radius: 50%;
       border-top-color: #fff;
@@ -312,14 +272,16 @@
     @media (max-width: 600px) {
       .form-grid { grid-template-columns: 1fr; }
       .radio-group { grid-template-columns: 1fr; }
-      .header h1 { font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
 
 <nav class="nav">
-  <div class="nav-brand">Copilot<span>Lab<  <div class="container">
+  <div class="nav-brand">Copilot<span>Lab</span></div>
+</nav>
+
+<div class="container">
   <div class="header">
     <h1>Laboratorio de Proyectos</h1>
     <p>Cuéntanos cómo planeas usar la IA para mejorar tu trabajo</p>
@@ -355,19 +317,19 @@
           <select id="proyecto" required>
             <option value="" disabled selected>Elige una opción</option>
             <optgroup label="Datos e Informes">
-              <option value="analysis">Organizar datos o crear reportes automáticos</option>
-              <option value="dashboard">Crear un panel visual con información</option>
+              <option value="Organizar datos">Organizar datos o crear reportes automáticos</option>
+              <option value="Panel visual">Crear un panel visual con información</option>
             </optgroup>
             <optgroup label="Ahorro de Tiempo">
-              <option value="automation">Hacer tareas repetitivas más rápido</option>
-              <option value="coding">Ayuda para escribir o corregir código</option>
+              <option value="Tareas repetitivas">Hacer tareas repetitivas más rápido</option>
+              <option value="Código">Ayuda para escribir o corregir código</option>
             </optgroup>
             <optgroup label="Creatividad y Textos">
-              <option value="content">Escribir correos, artículos o resúmenes</option>
-              <option value="multimedia">Crear imágenes o videos para presentaciones</option>
-              <option value="presentation">Mejorar el diseño de mis diapositivas</option>
+              <option value="Textos">Escribir correos, artículos o resúmenes</option>
+              <option value="Multimedia">Crear imágenes o videos</option>
+              <option value="Diapositivas">Mejorar el diseño de mis diapositivas</option>
             </optgroup>
-            <option value="other">Tengo otra idea en mente</option>
+            <option value="Otro">Tengo otra idea en mente</option>
           </select>
         </div>
 
@@ -384,7 +346,7 @@
               <input type="radio" name="nivel" value="Acceso parcial">
               <span class="icon">🔓</span>
               <span class="label">Intermedio</span>
-              <span class="sub">Tengo algunas herramientas extra</span>
+              <span class="sub">Tengo herramientas extra</span>
             </label>
             <label class="radio-card" data-level="Acceso completo">
               <input type="radio" name="nivel" value="Acceso completo">
@@ -406,40 +368,20 @@
         <span id="btnText">Enviar mi propuesta</span>
       </button>
     </form>
-  </div>d="loader"></span>
-        <span id="btnText">Enviar Registro</span>
-      </button>
-    </form>
   </div>
 
-  <!-- Vista de Resultados -->
   <div class="card results-card" id="resultsCard">
     <div class="card-title">📊 Proyectos Registrados</div>
-    
-    <div class="filter-row">
-      <input type="text" id="searchName" placeholder="Filtrar por nombre...">
-      <select id="filterGrupo">
-        <option value="">Todos los grupos</option>
-        <option>Grupo 1</option><option>Grupo 2</option><option>Grupo 3</option>
-        <option>Grupo 4</option><option>Grupo 5</option><option>Grupo 6</option>
-        <option>Grupo 7</option><option>Grupo 8</option><option>Grupo 9</option>
-        <option>Grupo 10</option>
-      </select>
-    </div>
-
     <div class="table-container">
       <table>
         <thead>
           <tr>
             <th>Estudiante</th>
             <th>Grupo</th>
-            <th>Proyecto</th>
-            <th>Acceso</th>
+            <th>Expectativa</th>
           </tr>
         </thead>
-        <tbody id="dataTable">
-          <!-- Datos dinámicos -->
-        </tbody>
+        <tbody id="dataTable"></tbody>
       </table>
     </div>
   </div>
@@ -448,12 +390,8 @@
 <div id="toast"></div>
 
 <script>
-  // ────────────────────────────────────────────
-  // CONFIGURACIÓN GOOGLE SHEETS
-  // ────────────────────────────────────────────
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyH94RoIKHwdRquQvnYNXrm20DLZAjNb-_4FZcdthvQrj9_5xRwbZP1tHZlym-lvGGOQA/exec';
-  // ────────────────────────────────────────────
-
+  
   const form = document.getElementById('projectForm');
   const submitBtn = document.getElementById('submitBtn');
   const btnText = document.getElementById('btnText');
@@ -463,7 +401,6 @@
   
   let projects = JSON.parse(localStorage.getItem('copilot_lab_records') || '[]');
 
-  // Visual selector for radios
   radioCards.forEach(card => {
     card.addEventListener('click', () => {
       radioCards.forEach(c => c.classList.remove('active'));
@@ -473,13 +410,8 @@
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
     const nivel = document.querySelector('input[name="nivel"]:checked')?.value;
-    if(!nivel) {
-      showToast('Por favor selecciona tu nivel de acceso', true);
-      return;
-    }
-
+    
     const formData = {
       nombre: document.getElementById('nombre').value.trim(),
       apellido: document.getElementById('apellido').value.trim(),
@@ -490,84 +422,53 @@
       fecha: new Date().toLocaleString()
     };
 
-    // UI Loading state
     submitBtn.disabled = true;
     loader.style.display = 'inline-block';
-    btnText.textContent = 'Procesando...';
+    btnText.textContent = 'Enviando...';
 
     try {
-      // 1. Guardar Local
       projects.push(formData);
       localStorage.setItem('copilot_lab_records', JSON.stringify(projects));
 
-      // 2. Enviar a Sheets
       await fetch(SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors', // Necesario para Google Scripts
+        mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
 
-      showToast('¡Registro completado con éxito!');
+      showToast('¡Enviado con éxito!');
       form.reset();
       radioCards.forEach(c => c.classList.remove('active'));
       renderTable();
-      document.getElementById('resultsCard').style.display = 'block';
-
     } catch (error) {
-      console.error(error);
-      showToast('Error al conectar con la base de datos.', true);
+      showToast('Error al enviar.', true);
     } finally {
       submitBtn.disabled = false;
       loader.style.display = 'none';
-      btnText.textContent = 'Enviar Registro';
+      btnText.textContent = 'Enviar mi propuesta';
     }
   });
 
   function showToast(msg, isError = false) {
     toast.textContent = msg;
     toast.className = isError ? 'show error' : 'show';
-    setTimeout(() => toast.className = '', 3500);
+    setTimeout(() => toast.className = '', 3000);
   }
-
-  // Table Logic
-  const searchInput = document.getElementById('searchName');
-  const grupoFilter = document.getElementById('filterGrupo');
 
   function renderTable() {
     const tableBody = document.getElementById('dataTable');
-    const search = searchInput.value.toLowerCase();
-    const grupo = grupoFilter.value;
-
-    const filtered = projects.filter(p => {
-      const matchName = (p.nombre + ' ' + p.apellido).toLowerCase().includes(search);
-      const matchGrupo = grupo === '' || p.grupo === grupo;
-      return matchName && matchGrupo;
-    });
-
-    if(filtered.length > 0) {
-      document.getElementById('resultsCard').style.display = 'block';
-    }
-
-    tableBody.innerHTML = filtered.map(p => `
+    if (projects.length > 0) document.getElementById('resultsCard').style.display = 'block';
+    tableBody.innerHTML = projects.map(p => `
       <tr>
-        <td>
-          <div style="font-weight:600">${p.nombre} ${p.apellido}</div>
-          <div style="font-size:0.75rem; color:var(--text-secondary)">${p.fecha}</div>
-        </td>
+        <td><strong>${p.nombre} ${p.apellido}</strong></td>
         <td><span class="badge badge-gray">${p.grupo}</span></td>
-        <td><span class="badge badge-blue">${p.proyecto}</span></td>
-        <td><span class="badge ${p.nivel === 'Acceso completo' ? 'badge-purple' : 'badge-gray'}">${p.nivel}</span></td>
+        <td><span style="color:var(--text-secondary);font-size:0.8rem">${p.descripcion || p.proyecto}</span></td>
       </tr>
     `).join('');
   }
 
-  searchInput.addEventListener('input', renderTable);
-  grupoFilter.addEventListener('change', renderTable);
-
-  // Initial Load
   if(projects.length > 0) renderTable();
 </script>
-
 </body>
 </html>
