@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro Proyecto Copilot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #DA0811;
+      --red-dk: #a8050d;
+      --green:  #007A33;
+      --gray-1: #f5f5f5;
+      --gray-2: #e8e8e8;
+      --gray-3: #999;
+      --text:   #222;
+      --white:  #ffffff;
+      --shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--gray-1);
+      min-height: 100vh;
+      color: var(--text);
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      background: var(--red);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      box-shadow: 0 2px 8px rgba(218,8,17,0.3);
+    }
+
+    .topbar-logo {
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .topbar-logo span { color: #ffe600; }
+
+    .topbar-tag {
+      background: rgba(255,255,255,0.15);
+      border-radius: 4px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* ── Hero banner ── */
+    .hero {
+      background: linear-gradient(135deg, var(--red) 0%, var(--red-dk) 100%);
+      color: var(--white);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 1.9rem;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .hero h1 span { color: #ffe600; }
+
+    .hero p {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    /* ── Page layout ── */
+    .page {
+      max-width: 680px;
+      margin: 2rem auto;
+      padding: 0 1rem 3rem;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--red);
+      margin-bottom: 1.4rem;
+    }
+
+    /* ── Form ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1rem;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #444;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    label .req { color: var(--red); }
+
+    input, select, textarea {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.92rem;
+      color: var(--text);
+      background: var(--white);
+      border: 1.5px solid var(--gray-2);
+      border-radius: 4px;
+      padding: 0.6rem 0.8rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(218,8,17,0.12);
+    }
+
+    select option { color: var(--text); }
+
+    textarea { resize: vertical; min-height: 75px; }
+
+    /* ── Copilot level pills ── */
+    .level-group {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .level-pill {
+      flex: 1;
+      min-width: 120px;
+      border: 1.5px solid var(--gray-2);
+      border-radius: 4px;
+      padding: 0.55rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .level-pill input[type="radio"] { display: none; }
+    .level-pill .p-icon { font-size: 1.2rem; display: block; }
+    .level-pill .p-lbl  { font-size: 0.72rem; font-weight: 700; color: #555; margin-top: 3px; display: block; text-transform: uppercase; }
+    .level-pill .p-sub  { font-size: 0.65rem; color: #999; display: block; }
+
+    .level-pill:hover              { border-color: var(--red); background: #fff5f5; }
+    .level-pill.sel-red            { border-color: #cc0000; background: #fff0f0; }
+    .level-pill.sel-red .p-lbl     { color: #cc0000; }
+    .level-pill.sel-amber          { border-color: #e08800; background: #fff8e6; }
+    .level-pill.sel-amber .p-lbl   { color: #e08800; }
+    .level-pill.sel-green          { border-color: var(--green); background: #f0fff5; }
+    .level-pill.sel-green .p-lbl   { color: var(--green); }
+
+    /* ── Submit btn ── */
+    .btn-submit {
+      width: 100%;
+      margin-top: 1.4rem;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 4px;
+      background: var(--red);
+      color: var(--white);
+      font-family: 'Lato', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.12s;
+    }
+
+    .btn-submit:hover  { background: var(--red-dk); }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* ── Toast ── */
+    #toast {
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--green);
+      color: var(--white);
+      border-radius: 4px;
+      padding: 0.8rem 1.2rem;
+      margin-top: 1rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    #toast.error { background: #cc0000; }
+
+    /* ── Filter section ── */
+    .filter-bar {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .filter-bar input,
+    .filter-bar select {
+      flex: 1;
+      min-width: 140px;
+      font-size: 0.83rem;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+    }
+
+    th {
+      background: var(--red);
+      color: var(--white);
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.4px;
+    }
+
+    td {
+      padding: 0.55rem 0.8rem;
+      border-bottom: 1px solid var(--gray-2);
+      color: var(--text);
+    }
+
+    tr:hover td { background: #fdf0f0; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .tag-data      { background: #e3f2fd; color: #1565c0; }
+    .tag-auto      { background: #fce4ec; color: #c62828; }
+    .tag-content   { background: #e8f5e9; color: #2e7d32; }
+    .tag-image     { background: #f3e5f5; color: #6a1b9a; }
+    .tag-code      { background: #fff3e0; color: #e65100; }
+    .tag-other     { background: #f5f5f5; color: #616161; }
+
+    .empty { text-align: center; padding: 1.5rem; color: var(--gray-3); font-size: 0.85rem; }
+
+    /* ── Loader spinner ── */
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 520px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .hero h1   { font-size: 1.4rem; }
+      .level-group { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top bar -->
+<nav class="topbar">
+  <span class="topbar-logo">falabella<span>.</span></span>
+  <span class="topbar-tag">📚 Clase Copilot</span>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>Registro de <span>Intención de Proyecto</span></h1>
+  <p>Completa el formulario y tu propuesta quedará guardada automáticamente</p>
+</div>
+
+<div class="page">
+
+  <!-- ── Formulario ── -->
+  <div class="card">
+    <div class="card-title">📝 Datos del Estudiante</div>
+
+    <form id="studentForm">
+      <div class="form-grid">
+
+        <div class="field">
+          <label for="nombre">Nombre <span class="req">*</span></label>
+          <input id="nombre" type="text" placeholder="Ej. María" required/>
+        </div>
+
+        <div class="field">
+          <label for="apellido">Apellido <span class="req">*</span></label>
+          <input id="apellido" type="text" placeholder="Ej. Gómez" required/>
+        </div>
+
+        <!-- Grupo -->
+        <div class="field full">
+          <label for="grupo">Grupo <span class="req">*</span></label>
+          <select id="grupo" required>
+            <option value="" disabled selected>— Selecciona tu grupo —</option>
+            <option value="Grupo 1">Grupo 1</option>
+            <option value="Grupo 2">Grupo 2</option>
+            <option value="Grupo 3">Grupo 3</option>
+            <option value="Grupo 4">Grupo 4</option>
+            <option value="Grupo 5">Grupo 5</option>
+            <option value="Grupo 6">Grupo 6</option>
+            <option value="Grupo 7">Grupo 7</option>
+            <option value="Grupo 8">Grupo 8</option>
+            <option value="Grupo 9">Grupo 9</option>
+            <option value="Grupo 10">Grupo 10</option>
+          </select>
+        </div>
+
+        <!-- Proyecto -->
+        <div class="field full">
+          <label for="proyecto">¿Qué espera crear con Copilot? <span class="req">*</span></label>
+          <select id="proyecto" required>
+            <option value="" disabled selected>— Selecciona el tipo de proyecto —</option>
+            <optgroup label="📊 Datos & Análisis">
+              <option value="analysis">Análisis de datos / informes automáticos</option>
+              <option value="dashboard">Dashboard o visualización de información</option>
+            </optgroup>
+            <optgroup label="🤖 Automatización">
+              <option value="automation">Automatización de tareas repetitivas</option>
+              <option value="email">Redacción y gestión de correos automáticos</option>
+            </optgroup>
+            <optgroup label="💬 Comunicación & Contenido">
+              <option value="chatbot">Asistente / chatbot de preguntas frecuentes</option>
+              <option value="content">Generación de contenido (textos, posts, resúmenes)</option>
+              <option value="translation">Traducción o adaptación de documentos</option>
+            </optgroup>
+            <optgroup label="🎨 Creatividad">
+              <option value="image">Generación de imágenes para presentaciones</option>
+              <option value="presentation">Diseño de presentaciones (PowerPoint)</option>
+            </optgroup>
+            <optgroup label="💻 Código & Desarrollo">
+              <option value="code-basic">Asistencia básica en código (snippets, depuración)</option>
+              <option value="code-web">Apoyo en desarrollo web (HTML/CSS/JS básico)</option>
+            </optgroup>
+            <optgroup label="📝 Otros">
+              <option value="research">Investigación y síntesis de información</option>
+              <option value="other">Otro (describir abajo)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- Nivel Copilot -->
+        <div class="field full">
+          <label>Acceso actual a Copilot <span class="req">*</span></label>
+          <div class="level-group" id="levelGroup">
+            <label class="level-pill" id="pill-limited">
+              <input type="radio" name="copilot_level" value="Muy limitado" required/>
+              <span class="p-icon">🔴</span>
+              <span class="p-lbl">Muy limitado</span>
+              <span class="p-sub">Solo texto básico</span>
+            </label>
+            <label class="level-pill" id="pill-medium">
+              <input type="radio" name="copilot_level" value="Acceso parcial"/>
+              <span class="p-icon">🟡</span>
+              <span class="p-lbl">Acceso parcial</span>
+              <span class="p-sub">Texto + algunas funciones</span>
+            </label>
+            <label class="level-pill" id="pill-full">
+              <input type="radio" name="copilot_level" value="Acceso completo"/>
+              <span class="p-icon">🟢</span>
+              <span class="p-lbl">Acceso completo</span>
+              <span class="p-sub">M365 + plugins</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label for="descripcion">Descripción del proyecto</label>
+          <textarea id="descripcion" placeholder="Describe brevemente qué problema quieres resolver o qué quieres lograr con Copilot..."></textarea>
+        </div>
+
+      </div>
+
+      <button class="btn-submit" type="submit" id="submitBtn">
+        Registrar mi proyecto
+      </button>
+
+      <div id="toast"></div>
+    </form>
+  </div>
+
+  <!-- ── Tabla / filtro ── -->
+  <div class="card" id="resultsCard" style="display:none">
+    <div class="card-title">📋 Estudiantes registrados</div>
+
+    <div class="filter-bar">
+      <input id="searchInput" type="text" placeholder="🔍 Buscar por nombre..."/>
+      <select id="filterGrupo">
+        <option value="">Todos los grupos</option>
+        <option>Grupo 1</option><option>Grupo 2</option><option>Grupo 3</option>
+        <option>Grupo 4</option><option>Grupo 5</option><option>Grupo 6</option>
+        <option>Grupo 7</option><option>Grupo 8</option><option>Grupo 9</option>
+        <option>Grupo 10</option>
+      </select>
+      <select id="filterProject">
+        <option value="">Todos los proyectos</option>
+        <option value="analysis">Análisis de datos</option>
+        <option value="dashboard">Dashboard</option>
+        <option value="automation">Automatización</option>
+        <option value="email">Correos automáticos</option>
+        <option value="chatbot">Chatbot</option>
+        <option value="content">Contenido</option>
+        <option value="translation">Traducción</option>
+        <option value="image">Imágenes</option>
+        <option value="presentation">Presentaciones</option>
+        <option value="code-basic">Código básico</option>
+        <option value="code-web">Desarrollo web</option>
+        <option value="research">Investigación</option>
+        <option value="other">Otro</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Grupo</th>
+            <th>Proyecto</th>
+            <th>Copilot</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody id="studentsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ────────────────────────────────────────────
+  // 🔧 CONFIGURACIÓN – pega aquí tu URL de Apps Script
+  // ────────────────────────────────────────────
+  const SHEETS_URL = 'TU_URL_DE_APPS_SCRIPT_AQUI';
+  // ────────────────────────────────────────────
+
+  const projectLabels = {
+    analysis:'Análisis de datos', dashboard:'Dashboard',
+    automation:'Automatización', email:'Correos auto.',
+    chatbot:'Chatbot', content:'Contenido', translation:'Traducción',
+    image:'Imágenes', presentation:'Presentaciones',
+    'code-basic':'Código básico', 'code-web':'Desarrollo web',
+    research:'Investigación', other:'Otro'
+  };
+
+  const tagClass = {
+    analysis:'tag-data', dashboard:'tag-data',
+    automation:'tag-auto', email:'tag-auto',
+    chatbot:'tag-content', content:'tag-content', translation:'tag-content',
+    image:'tag-image', presentation:'tag-image',
+    'code-basic':'tag-code', 'code-web':'tag-code',
+    research:'tag-data', other:'tag-other'
+  };
+
+  // ── Level pill visual ──
+  const pills = document.querySelectorAll('.level-pill');
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.className = 'level-pill');
+      const val = pill.querySelector('input').value;
+      pill.classList.add(val === 'Muy limitado' ? 'sel-red' : val === 'Acceso parcial' ? 'sel-amber' : 'sel-green');
+    });
+  });
+
+  // ── Local store ──
+  let students = JSON.parse(localStorage.getItem('copilot_v2') || '[]');
+
+  // ── Submit ──
+  document.getElementById('studentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const nivel = document.querySelector('input[name="copilot_level"]:checked')?.value;
+    if (!nivel) { showToast('Por favor selecciona tu nivel de acceso a Copilot.', true); return; }
+
+    const data = {
+      nombre:    document.getElementById('nombre').value.trim(),
+      apellido:  document.getElementById('apellido').value.trim(),
+      grupo:     document.getElementById('grupo').value,
+      proyecto:  document.getElementById('proyecto').value,
+      nivel,
+      descripcion: document.getElementById('descripcion').value.trim(),
+      fecha:     new Date().toLocaleString('es-CO')
+    };
+
+    // Guardar local
+    students.push(data);
+    localStorage.setItem('copilot_v2', JSON.stringify(students));
+
+    // Enviar a Google Sheets
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Enviando...';
+
+    try {
+      if (SHEETS_URL && SHEETS_URL !== 'TU_URL_DE_APPS_SCRIPT_AQUI') {
+        await fetch(SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      }
+      showToast('✅ ¡Registro exitoso! Tu proyecto fue guardado.');
+      this.reset();
+      pills.forEach(p => p.className = 'level-pill');
+      renderTable();
+      document.getElementById('resultsCard').style.display = 'block';
+    } catch (err) {
+      showToast('Error al enviar. Datos guardados localmente.', true);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Registrar mi proyecto';
+    }
+  });
+
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = isError ? 'error' : '';
+    t.style.display = 'flex';
+    setTimeout(() => t.style.display = 'none', 4000);
+  }
+
+  // ── Filters ──
+  ['searchInput','filterGrupo','filterProject'].forEach(id =>
+    document.getElementById(id).addEventListener('input', renderTable)
+  );
+
+  function renderTable() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const grupo  = document.getElementById('filterGrupo').value;
+    const proj   = document.getElementById('filterProject').value;
+    const tbody  = document.getElementById('studentsTable');
+
+    const filtered = students.filter(s => {
+      const name = (s.nombre + ' ' + s.apellido).toLowerCase();
+      return (!search || name.includes(search))
+          && (!grupo  || s.grupo === grupo)
+          && (!proj   || s.proyecto === proj);
+    });
+
+    if (!filtered.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="empty">Sin resultados.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((s, i) => `
+      <tr>
+        <td style="color:#aaa">${i+1}</td>
+        <td><strong>${s.nombre} ${s.apellido}</strong></td>
+        <td>${s.grupo}</td>
+        <td><span class="tag ${tagClass[s.proyecto]||'tag-other'}">${projectLabels[s.proyecto]||s.proyecto}</span></td>
+        <td>${s.nivel}</td>
+        <td style="color:#777;font-size:0.78rem">${s.descripcion||'—'}</td>
+      </tr>
+    `).join('');
+  }
+
+  if (students.length) {
+    document.getElementById('resultsCard').style.display = 'block';
+    renderTable();
+  }
+</script>
+</body>
+</html>
