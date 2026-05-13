@@ -3,472 +3,524 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Copilot Project Lab | Registro de Intención</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+  <title>Copilot Lab | Registro de Proyectos</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --bg: #0a0b10;
-      --card-bg: #15171e;
-      --accent: #ff4d4d; /* Cyber Red */
-      --accent-glow: rgba(255, 77, 77, 0.4);
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --border: #2d333f;
+      --bg-dark: #05060a;
+      --bg-surface: #0f111a;
+      --accent-red: #ff3c3c;
+      --accent-glow: rgba(255, 60, 60, 0.35);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-hover: rgba(255, 255, 255, 0.06);
       --success: #10b981;
-      --warning: #f59e0b;
-      --error: #ff4d4d;
-      --input-bg: #1e212b;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Outfit', sans-serif;
-      background-color: var(--bg);
+      background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 10% 20%, rgba(255, 60, 60, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(255, 60, 60, 0.03) 0%, transparent 40%);
+      color: var(--text-main);
       min-height: 100vh;
-      color: var(--text-primary);
-      line-height: 1.5;
-    }
-
-    /* ── Navbar ── */
-    .nav {
-      height: 70px;
+      overflow-x: hidden;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      border-bottom: 1px solid var(--border);
-      background: rgba(10, 11, 16, 0.8);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      padding: 2rem 1rem;
     }
 
-    .nav-brand {
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 60, 60, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 60, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 60, 60, 0); } }
+
+    .animate-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    /* Header Section */
+    .header {
+      text-align: center;
+      margin-bottom: 4rem;
+      max-width: 600px;
     }
 
-    .nav-brand span {
-      background: linear-gradient(135deg, #ff4d4d, #8b5cf6);
+    .header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 30%, var(--accent-red) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    /* ── Container ── */
-    .container {
-      max-width: 800px;
-      margin: 3rem auto;
-      padding: 0 1.5rem;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .header h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-
     .header p {
-      color: var(--text-secondary);
       font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 300;
     }
 
-    /* ── Card ── */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 2.5rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    /* Main Container */
+    .main-card {
+      width: 100%;
+      max-width: 800px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 32px;
+      padding: 3rem;
       position: relative;
-      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+      backdrop-filter: blur(20px);
     }
 
-    .card::before {
+    .main-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; height: 4px;
-      background: linear-gradient(90deg, var(--accent), #8b5cf6);
+      inset: -1px;
+      border-radius: 32px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent, rgba(255, 60, 60, 0.2));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
     }
 
-    .card-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 2.5rem;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
     }
 
-    /* ── Form ── */
-    .form-grid {
+    .section-title span {
+      width: 40px;
+      height: 2px;
+      background: var(--accent-red);
+      display: block;
+    }
+
+    /* Form Styles */
+    .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      gap: 2rem;
     }
 
-    .field { display: flex; flex-direction: column; gap: 8px; }
-    .field.full { grid-column: 1 / -1; }
+    .full { grid-column: 1 / -1; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
     label {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     input, select, textarea {
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.8rem 1rem;
-      color: var(--text-primary);
+      background: var(--glass);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1rem 1.2rem;
+      color: #fff;
       font-family: inherit;
       font-size: 1rem;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
+      outline: none;
     }
 
     input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(255, 77, 77, 0.15);
-      background: #232733;
+      border-color: var(--accent-red);
+      background: var(--glass-hover);
+      box-shadow: 0 0 20px rgba(255, 60, 60, 0.1);
     }
 
-    /* ── Custom Radio Buttons ── */
-    .radio-group {
+    textarea { min-height: 120px; resize: none; }
+
+    /* Custom Level Selector */
+    .level-selector {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 5px;
+      gap: 15px;
     }
 
-    .radio-card {
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem;
-      text-align: center;
+    .level-option {
       cursor: pointer;
-      transition: all 0.2s;
+      background: var(--glass);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
     }
 
-    .radio-card input { display: none; }
-    .radio-card .icon { font-size: 1.2rem; display: block; margin-bottom: 5px; }
-    .radio-card .label { font-size: 0.8rem; font-weight: 600; display: block; }
-    .radio-card .sub { font-size: 0.7rem; color: var(--text-secondary); display: block; }
+    .level-option input { display: none; }
 
-    .radio-card:hover { border-color: rgba(255,255,255,0.2); background: #232733; }
-    .radio-card.active[data-level="Muy limitado"] { border-color: var(--error); background: rgba(239, 68, 68, 0.1); }
-    .radio-card.active[data-level="Acceso parcial"] { border-color: var(--warning); background: rgba(245, 158, 11, 0.1); }
-    .radio-card.active[data-level="Acceso completo"] { border-color: var(--success); background: rgba(16, 185, 129, 0.1); }
+    .level-option .icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      display: block;
+      filter: grayscale(1) opacity(0.5);
+      transition: all 0.3s ease;
+    }
 
-    /* ── Submit Button ── */
-    .btn-submit {
-      width: 100%;
-      margin-top: 2rem;
-      padding: 1rem;
-      border: none;
-      border-radius: 14px;
-      background: var(--accent);
-      color: white;
-      font-size: 1.1rem;
+    .level-option .title {
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px var(--accent-glow);
+      font-size: 0.95rem;
+      display: block;
+      margin-bottom: 4px;
     }
 
-    .btn-submit:hover {
-      background: #ff3333;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px var(--accent-glow);
+    .level-option .desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: block;
     }
 
-    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .level-option:hover {
+      background: var(--glass-hover);
+      transform: translateY(-5px);
+      border-color: rgba(255,255,255,0.2);
+    }
 
-    /* ── Results Section ── */
-    .results-card {
+    /* Selected States */
+    .level-option.active[data-type="Básico"] { border-color: #64748b; background: rgba(100, 116, 139, 0.1); }
+    .level-option.active[data-type="Básico"] .icon { filter: none; opacity: 1; }
+
+    .level-option.active[data-type="Intermedio"] { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+    .level-option.active[data-type="Intermedio"] .icon { filter: none; opacity: 1; }
+
+    .level-option.active[data-type="Completo"] { border-color: var(--accent-red); background: rgba(255, 60, 60, 0.1); }
+    .level-option.active[data-type="Completo"] .icon { filter: none; opacity: 1; }
+
+    /* Button */
+    .btn-container {
       margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .submit-btn {
+      background: var(--accent-red);
+      color: white;
+      border: none;
+      padding: 1.2rem 3rem;
+      border-radius: 100px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px var(--accent-glow);
+    }
+
+    .submit-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 40px var(--accent-glow);
+      filter: brightness(1.1);
+    }
+
+    .submit-btn:disabled {
+      background: #334155;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Results Table */
+    .results-section {
+      margin-top: 5rem;
+      width: 100%;
+      max-width: 800px;
       display: none;
     }
 
-    .table-container {
-      overflow-x: auto;
-      border-radius: 16px;
-      border: 1px solid var(--border);
+    .table-card {
+      background: var(--glass);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      overflow: hidden;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
     }
 
     th {
-      background: #1e212b;
-      padding: 1rem;
       text-align: left;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 1.5rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
     }
 
-    td { padding: 1rem; border-bottom: 1px solid var(--border); }
+    td {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.95rem;
+    }
 
-    .badge {
+    tr:last-child td { border: none; }
+
+    .tag {
       padding: 4px 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 0.75rem;
       font-weight: 600;
+      background: var(--glass-hover);
     }
 
-    .badge-gray { background: rgba(148, 163, 184, 0.1); color: #cbd5e1; }
-    .badge-red { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; }
-
-    /* ── Toast ── */
-    #toast {
+    /* Success Overlay */
+    #success-overlay {
       position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      background: var(--success);
-      color: white;
-      font-weight: 600;
-      transform: translateY(100px);
-      transition: transform 0.3s;
+      inset: 0;
+      background: rgba(5, 6, 10, 0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       z-index: 1000;
-      display: none;
+      backdrop-filter: blur(10px);
     }
 
-    #toast.show { display: block; transform: translateY(0); }
-    #toast.error { background: var(--error); }
-
-    .loader {
-      width: 20px; height: 20px;
-      border: 2.5px solid rgba(255,255,255,0.3);
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success);
       border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 0.8s linear infinite;
-      display: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
-
+    /* Mobile adjustments */
     @media (max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .radio-group { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .level-selector { grid-template-columns: 1fr; }
+      .main-card { padding: 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-brand">Copilot<span>Lab</span></div>
-</nav>
+  <header class="header animate-in">
+    <h1>Copilot Lab<span>.</span></h1>
+    <p>Comparte tu visión. Transforma tu flujo de trabajo con Inteligencia Artificial.</p>
+  </header>
 
-<div class="container">
-  <div class="header">
-    <h1>Laboratorio de Proyectos</h1>
-    <p>Cuéntanos cómo planeas usar la IA para mejorar tu trabajo</p>
-  </div>
-
-  <div class="card">
-    <div class="card-title">📝 Tu Propuesta</div>
+  <main class="main-card animate-in" style="animation-delay: 0.1s">
+    <h2 class="section-title"><span></span> Propuesta de Proyecto</h2>
     
     <form id="projectForm">
-      <div class="form-grid">
-        <div class="field">
-          <label>Nombre</label>
-          <input type="text" id="nombre" placeholder="Escribe tu nombre" required>
+      <div class="grid">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" placeholder="Ej. Carlos" required>
         </div>
-        <div class="field">
-          <label>Apellido</label>
-          <input type="text" id="apellido" placeholder="Escribe tu apellido" required>
+        <div class="form-group">
+          <label for="apellido">Apellido</label>
+          <input type="text" id="apellido" placeholder="Ej. Ruiz" required>
         </div>
-        
-        <div class="field full">
-          <label>¿A qué grupo perteneces?</label>
+
+        <div class="form-group full">
+          <label for="grupo">¿En qué grupo estás trabajando?</label>
           <select id="grupo" required>
-            <option value="" disabled selected>Selecciona tu grupo</option>
-            <option>Grupo 1</option><option>Grupo 2</option><option>Grupo 3</option>
-            <option>Grupo 4</option><option>Grupo 5</option><option>Grupo 6</option>
-            <option>Grupo 7</option><option>Grupo 8</option><option>Grupo 9</option>
-            <option>Grupo 10</option>
+            <option value="" disabled selected>Selecciona tu equipo</option>
+            <option>Equipo 01</option><option>Equipo 02</option><option>Equipo 03</option>
+            <option>Equipo 04</option><option>Equipo 05</option><option>Equipo 06</option>
+            <option>Equipo 07</option><option>Equipo 08</option><option>Equipo 09</option>
+            <option>Equipo 10</option>
           </select>
         </div>
 
-        <div class="field full">
-          <label>¿En qué te gustaría usar Copilot?</label>
+        <div class="form-group full">
+          <label for="proyecto">¿Cómo planeas usar Copilot?</label>
           <select id="proyecto" required>
-            <option value="" disabled selected>Elige una opción</option>
-            <optgroup label="Datos e Informes">
-              <option value="Organizar datos">Organizar datos o crear reportes automáticos</option>
-              <option value="Panel visual">Crear un panel visual con información</option>
+            <option value="" disabled selected>Elige un área de enfoque</option>
+            <optgroup label="Optimización de Datos">
+              <option value="Reportes">Automatización de informes y datos</option>
+              <option value="Dashboards">Creación de tableros visuales</option>
             </optgroup>
-            <optgroup label="Ahorro de Tiempo">
-              <option value="Tareas repetitivas">Hacer tareas repetitivas más rápido</option>
-              <option value="Código">Ayuda para escribir o corregir código</option>
+            <optgroup label="Productividad">
+              <option value="Flujos">Hacer tareas manuales más rápido</option>
+              <option value="Desarrollo">Asistencia en programación y código</option>
             </optgroup>
-            <optgroup label="Creatividad y Textos">
-              <option value="Textos">Escribir correos, artículos o resúmenes</option>
-              <option value="Multimedia">Crear imágenes o videos</option>
-              <option value="Diapositivas">Mejorar el diseño de mis diapositivas</option>
+            <optgroup label="Diseño & Contenido">
+              <option value="Multimedia">Generación de imágenes y video</option>
+              <option value="Textos">Redacción creativa y resúmenes</option>
             </optgroup>
-            <option value="Otro">Tengo otra idea en mente</option>
+            <option value="Otro">Tengo otra propuesta innovadora</option>
           </select>
         </div>
 
-        <div class="field full">
-          <label>¿Qué tantas funciones tienes activas hoy en Copilot?</label>
-          <div class="radio-group" id="radioGroup">
-            <label class="radio-card" data-level="Muy limitado">
-              <input type="radio" name="nivel" value="Muy limitado" required>
-              <span class="icon">🔒</span>
-              <span class="label">Básico</span>
-              <span class="sub">Solo puedo chatear</span>
+        <div class="form-group full">
+          <label>¿Qué tantas funciones tienes hoy?</label>
+          <div class="level-selector" id="levelSelector">
+            <label class="level-option" data-type="Básico">
+              <input type="radio" name="nivel" value="Básico" required>
+              <span class="icon">🔘</span>
+              <span class="title">Básico</span>
+              <span class="desc">Solo chat estándar</span>
             </label>
-            <label class="radio-card" data-level="Acceso parcial">
-              <input type="radio" name="nivel" value="Acceso parcial">
-              <span class="icon">🔓</span>
-              <span class="label">Intermedio</span>
-              <span class="sub">Tengo herramientas extra</span>
+            <label class="level-option" data-type="Intermedio">
+              <input type="radio" name="nivel" value="Intermedio">
+              <span class="icon">🔶</span>
+              <span class="title">Intermedio</span>
+              <span class="desc">M365 + Web</span>
             </label>
-            <label class="radio-card" data-level="Acceso completo">
-              <input type="radio" name="nivel" value="Acceso completo">
-              <span class="icon">⚡</span>
-              <span class="label">Completo</span>
-              <span class="sub">Tengo todo habilitado</span>
+            <label class="level-option" data-type="Completo">
+              <input type="radio" name="nivel" value="Completo">
+              <span class="icon">🔥</span>
+              <span class="title">Completo</span>
+              <span class="desc">Todo habilitado</span>
             </label>
           </div>
         </div>
 
-        <div class="field full">
-          <label>¿Cuál es tu expectativa con este proyecto?</label>
-          <textarea id="descripcion" placeholder="Cuéntanos de forma sencilla qué esperas lograr o qué problema quieres resolver..."></textarea>
+        <div class="form-group full">
+          <label for="descripcion">¿Cuál es tu expectativa principal?</label>
+          <textarea id="descripcion" placeholder="Describe brevemente qué esperas lograr con esta herramienta..."></textarea>
         </div>
       </div>
 
-      <button type="submit" class="btn-submit" id="submitBtn">
-        <span class="loader" id="loader"></span>
-        <span id="btnText">Enviar mi propuesta</span>
-      </button>
+      <div class="btn-container">
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span>Enviar Propuesta</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
     </form>
-  </div>
+  </main>
 
-  <div class="card results-card" id="resultsCard">
-    <div class="card-title">📊 Proyectos Registrados</div>
-    <div class="table-container">
+  <section class="results-section animate-in" id="resultsSection">
+    <h2 class="section-title"><span></span> Lab Log</h2>
+    <div class="table-card">
       <table>
         <thead>
           <tr>
-            <th>Estudiante</th>
-            <th>Grupo</th>
-            <th>Expectativa</th>
+            <th>Participante</th>
+            <th>Equipo</th>
+            <th>Enfoque</th>
           </tr>
         </thead>
         <tbody id="dataTable"></tbody>
       </table>
     </div>
+  </section>
+
+  <div id="success-overlay">
+    <div class="success-icon">✓</div>
+    <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 10px;">¡Recibido!</h2>
+    <p style="color: var(--text-muted);">Tu propuesta ya está en el sistema.</p>
+    <button onclick="closeSuccess()" style="margin-top: 30px; background: transparent; border: 1px solid var(--border-color); color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer;">Cerrar</button>
   </div>
-</div>
 
-<div id="toast"></div>
-
-<script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyH94RoIKHwdRquQvnYNXrm20DLZAjNb-_4FZcdthvQrj9_5xRwbZP1tHZlym-lvGGOQA/exec';
-  
-  const form = document.getElementById('projectForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const btnText = document.getElementById('btnText');
-  const loader = document.getElementById('loader');
-  const toast = document.getElementById('toast');
-  const radioCards = document.querySelectorAll('.radio-card');
-  
-  let projects = JSON.parse(localStorage.getItem('copilot_lab_records') || '[]');
-
-  radioCards.forEach(card => {
-    card.addEventListener('click', () => {
-      radioCards.forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-    });
-  });
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const nivel = document.querySelector('input[name="nivel"]:checked')?.value;
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyH94RoIKHwdRquQvnYNXrm20DLZAjNb-_4FZcdthvQrj9_5xRwbZP1tHZlym-lvGGOQA/exec';
     
-    const formData = {
-      nombre: document.getElementById('nombre').value.trim(),
-      apellido: document.getElementById('apellido').value.trim(),
-      grupo: document.getElementById('grupo').value,
-      proyecto: document.getElementById('proyecto').value,
-      nivel: nivel,
-      descripcion: document.getElementById('descripcion').value.trim(),
-      fecha: new Date().toLocaleString()
-    };
+    const form = document.getElementById('projectForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const levelOptions = document.querySelectorAll('.level-option');
+    const successOverlay = document.getElementById('success-overlay');
+    
+    let db = JSON.parse(localStorage.getItem('lab_records_v3') || '[]');
 
-    submitBtn.disabled = true;
-    loader.style.display = 'inline-block';
-    btnText.textContent = 'Enviando...';
-
-    try {
-      projects.push(formData);
-      localStorage.setItem('copilot_lab_records', JSON.stringify(projects));
-
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+    // Custom Radio Selection Logic
+    levelOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        levelOptions.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        opt.querySelector('input').checked = true;
       });
+    });
 
-      showToast('¡Enviado con éxito!');
-      form.reset();
-      radioCards.forEach(c => c.classList.remove('active'));
-      renderTable();
-    } catch (error) {
-      showToast('Error al enviar.', true);
-    } finally {
-      submitBtn.disabled = false;
-      loader.style.display = 'none';
-      btnText.textContent = 'Enviar mi propuesta';
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const data = {
+        nombre: document.getElementById('nombre').value.trim(),
+        apellido: document.getElementById('apellido').value.trim(),
+        grupo: document.getElementById('grupo').value,
+        proyecto: document.getElementById('proyecto').value,
+        nivel: document.querySelector('input[name="nivel"]:checked').value,
+        descripcion: document.getElementById('descripcion').value.trim(),
+        fecha: new Date().toLocaleDateString()
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.querySelector('span').textContent = 'Procesando...';
+
+      try {
+        db.push(data);
+        localStorage.setItem('lab_records_v3', JSON.stringify(db));
+
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        successOverlay.style.display = 'flex';
+        form.reset();
+        levelOptions.forEach(o => o.classList.remove('active'));
+        renderTable();
+      } catch (err) {
+        alert('Hubo un problema al enviar. Intenta de nuevo.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.querySelector('span').textContent = 'Enviar Propuesta';
+      }
+    });
+
+    function renderTable() {
+      const tbody = document.getElementById('dataTable');
+      if (db.length > 0) document.getElementById('resultsSection').style.display = 'block';
+      tbody.innerHTML = db.reverse().slice(0, 5).map(p => `
+        <tr>
+          <td><div style="font-weight:600">${p.nombre} ${p.apellido}</div><div style="font-size:0.7rem; color:var(--text-muted)">${p.fecha}</div></td>
+          <td><span class="tag">${p.grupo}</span></td>
+          <td style="color:var(--accent-red); font-weight:500">${p.proyecto}</td>
+        </tr>
+      `).join('');
     }
-  });
 
-  function showToast(msg, isError = false) {
-    toast.textContent = msg;
-    toast.className = isError ? 'show error' : 'show';
-    setTimeout(() => toast.className = '', 3000);
-  }
+    function closeSuccess() {
+      successOverlay.style.display = 'none';
+    }
 
-  function renderTable() {
-    const tableBody = document.getElementById('dataTable');
-    if (projects.length > 0) document.getElementById('resultsCard').style.display = 'block';
-    tableBody.innerHTML = projects.map(p => `
-      <tr>
-        <td><strong>${p.nombre} ${p.apellido}</strong></td>
-        <td><span class="badge badge-gray">${p.grupo}</span></td>
-        <td><span style="color:var(--text-secondary);font-size:0.8rem">${p.descripcion || p.proyecto}</span></td>
-      </tr>
-    `).join('');
-  }
-
-  if(projects.length > 0) renderTable();
-</script>
+    if(db.length > 0) renderTable();
+  </script>
 </body>
 </html>
